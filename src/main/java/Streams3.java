@@ -12,7 +12,7 @@ The goal is to filter an array of integers and print only the numbers greater th
 You would use a for-each loop and an if-statement. This code is explicit about *how* to iterate
 and filter, mixing the "what" with the "how".
 
-   for(Integer i : numbers){
+   For (Integer i: numbers){
        if(i > 5){
            System.out.println(i);
        }
@@ -24,7 +24,7 @@ This approach focuses on *what* you want to achieve, not how.
    a. Create a Stream: `Arrays.stream(numbers)` converts the array into a stream, which is a
       sequence of elements that can be processed.
 
-   b. Intermediate Operation (`filter`): `filter()` is a lazy operation that creates a new stream
+   B. Intermediate Operation (`filter`): `filter()` is a lazy operation that creates a new stream
       containing only the elements that satisfy a given condition (a `Predicate`). In the verbose
       form, this is an anonymous inner class. The stream is not processed yet.
 

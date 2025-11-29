@@ -1,7 +1,7 @@
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/*
+/**
 This file demonstrates the evolution of writing a Consumer in Java,
 showing how modern Java features can drastically reduce boilerplate code.
 
@@ -27,11 +27,11 @@ This is much more concise. The compiler infers the type of 's'.
 When your lambda expression simply calls an existing method, you can use a
 method reference for even cleaner code. `System.out::println` is a reference
 to the `println` method on the `System.out` object. This is the most
-declarative and readable form.It reduces the boilerplatecode.
+declarative and readable form. It reduces the boilerplate code.
 
     Consumer<Integer> consumer = System.out::println;
 
-By using a method reference directly in the stream's forEach method, you can
+By using a method reference directly in the stream forEach method, you can
 reduce multiple lines of code into a single, expressive statement.
 */
 public class Streams2 {
