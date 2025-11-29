@@ -1,0 +1,143 @@
+/*
+* Why Java Streams are LAZY (Important Stream Concept)
+* ----------------------------------------------------
+* 1) Streams are NOT data containers like Lists.
+*    A Stream is a pipeline of operations (filter, map, sorted, etc.)
+*    that describes *what to do*, not when to do it.
+*
+* 2) All intermediate operations (filter(), map(), distinct(), sorted(), etc.)
+*    are LAZY. This means:
+*       - They do NOT run immediately.
+*       - They only build a pipeline (a recipe of steps).
+*       - No element is processed until a TERMINAL operation is called.
+*
+* 3) A TERMINAL operation (forEach, collect, reduce, count, findFirst, etc.)
+*    triggers the execution of the entire pipeline.
+*    Once this happens, the Stream is CONSUMED and cannot be reused.
+*
+* 4) Reason for laziness (Performance + Design):
+*       - Avoids unnecessary work (only required elements are processed).
+*       - Combines all operations into a single pass (pipeline fusion).
+*       - Allows infinite streams (Stream.generate/iterate).
+*       - Saves memory by avoiding temporary collections.
+*       - Enables functional-style processing similar to Haskell, Scala, MapReduce.
+*
+* 5) Historical background:
+*       - Java 8 Streams were inspired by functional programming languages.
+*       - JDK architects wanted a high-performance, declarative way to process data.
+*       - Streams were designed to be immutable, one-time pipelines,
+*         NOT like a List that stores data.
+*
+* In short:
+*   Stream operations are lazy because Streams represent a *recipe*,
+*   not actual work. Work only happens when a terminal operation is called.
+*/
+
+-------------------------------------------------------------------------------
+
+/*
+ * INTERMEDIATE vs TERMINAL Operations in Java Streams
+ * ---------------------------------------------------
+ * Streams have two types of operations:
+ *
+ * 1) INTERMEDIATE OPERATIONS:
+ *    - Examples: filter(), map(), flatMap(), sorted(), distinct(), peek()
+ *    - These operations are LAZY.
+ *    - They do NOT execute immediately.
+ *    - Instead, they build a pipeline (a sequence of steps).
+ *    - They return another Stream so you can keep chaining operations.
+ *    - No data is actually processed at this stage.
+ *
+ *    Think of them as: "Add this step to the recipe."
+ *
+ * 2) TERMINAL OPERATIONS:
+ *    - Examples: forEach(), collect(), reduce(), count(),
+ *                findFirst(), findAny(), toArray(), min(), max()
+ *    - These operations trigger the execution of the entire pipeline.
+ *    - After a terminal operation, the Stream is CONSUMED and CLOSED.
+ *    - They do NOT return another Stream.
+ *
+ *    Think of them as: "Now run the recipe and produce the final result."
+ *
+ * Summary:
+ *  - Intermediate operations build the pipeline (lazy).
+ *  - Terminal operations execute the pipeline (eager).
+ */
+
+-------------------------------------------------------------------------------
+
+
+/*
+ * WHY JAVA STREAMS CANNOT BE REUSED
+ * ---------------------------------
+ * Streams represent a one-time-use data pipeline.
+ * They are NOT like a List that stores data.
+ *
+ * Reasons:
+ *
+ * 1) Streams are LAZY and represent a computation pipeline.
+ *    When a terminal operation runs, the pipeline is EXECUTED.
+ *    After that, there is no pipeline left to run again.
+ *
+ * 2) Streams often work with non-repeatable data sources:
+ *       - Files
+ *       - Network streams
+ *       - I/O channels
+ *       - Generators (Stream.generate / iterate)
+ *    These can only be consumed once.
+ *
+ * 3) Allowing reuse would require storing all elements,
+ *    which destroys the memory and performance advantages of Streams.
+ *
+ * 4) The Stream API design follows functional programming principles:
+ *    - Immutable
+ *    - Stateless
+ *    - One-time evaluation
+ *
+ * 5) After any TERMINAL operation (forEach, collect, reduce, etc.),
+ *    the Stream marks itself as CONSUMED to prevent accidental reuse.
+ *
+ * In short:
+ *   A Stream is a "flow of data" that moves forward only once.
+ *   Once consumed, the flow ends.
+ */
+
+-------------------------------------------------------------------------------
+
+/*
+ * FUNCTIONAL vs DECLARATIVE PROGRAMMING STYLES
+ * --------------------------------------------
+ *
+ * DECLARATIVE PROGRAMMING:
+ *   - Focuses on *WHAT* should be done, not *HOW*.
+ *   - You describe the goal, not the steps.
+ *   - No explicit loops or mutations.
+ *   - Examples: SQL, Java Streams.
+ *
+ *   Example:
+ *       numbers.stream()
+ *              .filter(n -> n > 10)
+ *              .map(n -> n * 2)
+ *              .toList();
+ *
+ *   This does not specify HOW filtering or mapping happens internally.
+ *
+ * FUNCTIONAL PROGRAMMING:
+ *   - Is a specific form of declarative programming.
+ *   - Uses PURE FUNCTIONS (no side effects, no mutation).
+ *   - Data is immutable.
+ *   - Same input always gives the same output.
+ *   - Encourages higher-order functions (functions passed as values).
+ *
+ *   Example (functional):
+ *       Function<Integer, Integer> doubleIt = x -> x * 2;
+ *
+ * Relationship:
+ *   - Functional programming is a *subset* of declarative programming.
+ *   - All functional code is declarative,
+ *     but declarative code does not have to be functional (e.g., SQL).
+ *
+ * In short:
+ *   Declarative = "WHAT to do"
+ *   Functional  = "WHAT to do + using pure, immutable functions"
+ */
